@@ -1,2 +1,4 @@
 .env
 venv_you_team/
+.idea/
+__pycache__/

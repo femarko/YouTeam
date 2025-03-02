@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Auth
+  version: 1.0.0
+tags:
+  - name: Users
+    description: В этом блоке собраны все операции, связанные с пользователями
+paths:
+  /users/:
+    post:
+      tags:
+        - user
+      summary: Создать нового пользователя
+      description: >-
+        Новый пользователь создается POST-запросом со следующими параметрами в теле:
+          * __name__*: имя пользователя
+          * __full_name__: полное имя пользователя
+          * __email__*: электронная почта
+          * __password__*: пароль
+          
+        \* обязательное поле
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllOfCreationUserData'
+      responses:
+        '201':
+          description: "Успех: новый пользователь создан"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreationSuccess'
+        '400':
+          description: "Ошибка: введены неверные данные"
+        '409':
+          description: "Ошибка: пользователь с такими данными уже существует"
+security:
+  - jwt_auth: []
+components:
+  schemas:
+    AllOfUserData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: test name
+        full_name:
+          type: string
+          example: test full name
+        email:
+          type: string
+          example: email@test.com
+    AllOfCreationUserData:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AllOfUserData"
+      properties:
+        password:
+          type: string
+          example: test_pass
+    UserCreationSuccess:
+      type: object
+      properties:
+        New user is created :
+          $ref: '#/components/schemas/AllOfUserData'
+  securitySchemes:
+    jwt_auth:
+      type: apiKey
+      in: header
+      name: Authorization
