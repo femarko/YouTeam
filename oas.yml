@@ -1,16 +1,18 @@
 openapi: 3.0.0
 info:
-  title: Auth
+  title: "Пользователи: регистрация и аутентификация"
   version: 1.0.0
 tags:
-  - name: Users
-    description: В этом блоке собраны все операции, связанные с пользователями
+  - name: Регистрация
+    description: Создание нового пользователя
+  - name: Аутентификация
+    description: Вход в систему по адресу электронной почты и паролю
 paths:
   /users/:
     post:
       tags:
-        - user
-      summary: Создать нового пользователя
+        - Регистрация
+      summary: POST-запрос с данными нового пользователя
       description: >-
         Новый пользователь создается POST-запросом со следующими параметрами в теле:
           * __name__*: имя пользователя
@@ -33,22 +35,72 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserCreationSuccess'
         '400':
-          description: "Ошибка: введены неверные данные"
+          $ref: '#/components/responses/ValidationError'
         '409':
-          description: "Ошибка: пользователь с такими данными уже существует"
+          description: "Ошибка: пользователь с такими данныи уже существует."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+                    example: "A user with the provided params already existsts."
+  /users/login/:
+    post:
+      tags:
+       - Аутентификация
+      summary: POST-запрос с адресом электронной почты и паролем
+      description: >-
+        Обязательные поля POST-запроса:
+          * __email__: электронная почта
+          * __password__: пароль
+        
+        В случае успеха возращается токен (Json Web Token), который должен включаться в заголовок 
+        "Authorization" при выполнении HTTP-запросов ко всем защищенным ресурсам системы.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AllOfLoginUserData'
+      responses:
+        '200':
+          description: "Успешная аутентификация: возвращается токен"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    example: Gybhcfr567ygNY&*(IJo0-=.]vh23yhbnml-=-0ij
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: "#/components/responses/Unauthorized"
 security:
   - jwt_auth: []
 components:
   schemas:
+    AllOfLoginUserData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: test_name
+        email:
+          type: string
+          example: email@test.com
     AllOfUserData:
       type: object
       properties:
         name:
           type: string
-          example: test name
+          example: test_name
         full_name:
           type: string
-          example: test full name
+          example: test_full_name
         email:
           type: string
           example: email@test.com
@@ -63,8 +115,47 @@ components:
     UserCreationSuccess:
       type: object
       properties:
-        New user is created :
+        New user is created:
           $ref: '#/components/schemas/AllOfUserData'
+    ValidationErrorUserData:
+      type: object
+      properties:
+        type:
+          type: string
+          example: missing
+        loc:
+          type: string
+          example: missed_param
+        msg:
+          type: string
+          example: Field required
+        input:
+          $ref: "#/components/schemas/AllOfUserData"
+        url:
+          type: string
+          example: https://errors.pydantic.dev/2.9/v/missing
+  responses:
+    Unauthorized:
+      description: "Ошибка: неверный email или пароль"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: string
+                example: "Invalid credentials."
+    ValidationError:
+      description: "Ошибка: введены неверные параметры. В данном примере отсустствует пароль:"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidationErrorUserData'
   securitySchemes:
     jwt_auth:
       type: apiKey
