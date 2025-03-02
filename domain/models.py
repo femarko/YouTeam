@@ -12,7 +12,7 @@ class User(Base):
             name: str,
             email: str,
             password: str,
-            user_id: Optional[int] = None,
+            id: Optional[int] = None,
             creation_date: Optional[datetime] = None
     ):
         self.id = id

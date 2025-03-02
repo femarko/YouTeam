@@ -2,3 +2,4 @@
 venv_you_team/
 .idea/
 __pycache__/
+.coverage
