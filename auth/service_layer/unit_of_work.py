@@ -32,4 +32,4 @@ class UnitOfWork:
             if self.users.db_errors is None:
                 raise custom_errors.InternalServerError
             else:
-                raise self.users.db_errors.get(e, custom_errors.InternalServerError)
+                raise self.users.db_errors.get(type(e), custom_errors.InternalServerError)

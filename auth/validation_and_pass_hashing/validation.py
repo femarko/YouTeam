@@ -1,5 +1,5 @@
 import pydantic
-from typing import TypeVar, Type
+from typing import TypeVar, Type, Optional
 
 from domain import custom_errors
 
@@ -9,6 +9,7 @@ PydanticModel = TypeVar("PydanticModel", bound=pydantic.BaseModel)
 
 class CreateUser(pydantic.BaseModel):
     name: str
+    full_name: Optional[str] = None
     email: str
     password: str
 

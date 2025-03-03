@@ -27,13 +27,7 @@ class Repository:
         self.db_errors = db_errors
 
     def add(self, instance) -> None:
-        try:
             self.session.add(instance)
-        except Exception as e:
-            if self.db_errors is None:
-                raise custom_errors.InternalServerError
-            else:
-                raise self.db_errors.get(e, custom_errors.InternalServerError)
 
     def get(self, instance_id: int) -> Any:
         return self.session.get(self.model_cl, instance_id)

@@ -8,6 +8,10 @@ def create_user(**user_data) -> User:
 def get_params(model: User) -> dict[str, str | int]:
     if isinstance(model, User):
         return {
-            "id": model.id, "name": model.name, "email": model.email, "creation_date": model.creation_date.isoformat()
+            "id": model.id,
+            "name": model.name,
+            "full_name": model.full_name,
+            "email": model.email,
+            "creation_date": model.creation_date.isoformat()
         }
     return dict()
