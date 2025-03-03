@@ -1,7 +1,8 @@
+import pytest
 import datetime
 from typing import Optional
 
-import pytest
+from orm import table_mapper
 
 
 @pytest.fixture
@@ -40,6 +41,11 @@ def fake_advs_repo():
 @pytest.fixture(scope="function")
 def fake_unit_of_work():
     return FakeUnitOfWork
+
+
+@pytest.fixture(autouse=True, scope="session")
+def start_mapping():
+    table_mapper.start_mapping()
 
 
 class FakeBaseRepo:

@@ -1,3 +1,7 @@
 pydantic==2.10.6
 pytest==8.3.5
 bcrypt==4.3.0
+SQLAlchemy==2.0.38
+psycopg2-binary==2.9.10
+dotenv==0.9.9
+python-dotenv==1.0.1
