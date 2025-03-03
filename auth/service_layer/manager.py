@@ -18,14 +18,16 @@ def create_user(
         return {"id": user_id, **created_user_data}
 
 
-def jwt_auth(validate_func: Callable, check_pass_func: Callable[..., bool], grant_access_func: Callable,
-             credentials: dict, uow) -> str:
+def jwt_auth(
+        validate_func: Callable,
+        check_pass_func: Callable[..., bool],
+        grant_access_func: Callable,
+        credentials: dict[str, str],
+        uow
+) -> str:
     validated_data = validate_func(**credentials)
     with uow:
-        list_of_users: list[models.User] = uow.users.get_list_or_paginated_data(
-            filter_type=FilterTypes.COLUMN_VALUE, comparison=Comparison.IS, column=UserColumns.EMAIL,
-            column_value=validated_data[UserColumns.EMAIL]
-        )
+        list_of_users: list[models.User] = uow.users.get_by_email(email=validated_data["email"])
     try:
         user: models.User = list_of_users[0]
     except IndexError:
@@ -34,14 +36,3 @@ def jwt_auth(validate_func: Callable, check_pass_func: Callable[..., bool], gran
         access_token: str = grant_access_func(identity=user.id)
         return access_token
     raise custom_errors.AccessDeniedError
-
-
-def get_user_data(user_id: int, check_current_user_func: Callable, uow):
-    current_user_id: int = check_current_user_func(user_id=user_id, get_cuid=True)
-    with uow:
-        user = uow.users.get(current_user_id)
-    user_params: dict[str, str | int] = services.get_params(model=user)
-    if user_params:
-        return user_params
-    raise custom_errors.NotFoundError(message_prefix="The user")
-

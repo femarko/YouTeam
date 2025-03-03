@@ -1,3 +1,4 @@
+import enum
 from datetime import datetime
 from typing import Optional, TypeVar
 
@@ -22,6 +23,13 @@ class User(Base):
         self.email = email
         self.password = password
         self.creation_date = creation_date
+
+
+class UserColumns(str, enum.Enum):
+    ID = "id",
+    NAME = "name"
+    EMAIL = "email"
+    CREATION_DATE = "creation_date"
 
 
 ModelClass = TypeVar("ModelClass", bound=Base)
