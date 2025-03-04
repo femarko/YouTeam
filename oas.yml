@@ -46,6 +46,8 @@ paths:
                   errors:
                     type: string
                     example: "A user with the provided params already existsts."
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /users/login/:
     post:
       tags:
@@ -79,6 +81,9 @@ paths:
           $ref: '#/components/responses/ValidationError'
         '401':
           $ref: "#/components/responses/Unauthorized"
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
 security:
   - jwt_auth: []
 components:
@@ -95,6 +100,9 @@ components:
     AllOfUserData:
       type: object
       properties:
+        id:
+          type: integer
+          example: 1
         name:
           type: string
           example: test_name
@@ -104,6 +112,9 @@ components:
         email:
           type: string
           example: email@test.com
+        creation_date:
+          type: string
+          example: l;l;l;
     AllOfCreationUserData:
       type: object
       allOf:
@@ -156,6 +167,16 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/ValidationErrorUserData'
+    InternalServerError:
+          description: "Ошибка: внутренняя ошибка сервера. Обработка непредвиденных исключений."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: string
+                    example: "Internal server error."
   securitySchemes:
     jwt_auth:
       type: apiKey
