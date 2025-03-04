@@ -4,4 +4,6 @@ venv_you_team/
 __pycache__/
 .coverage
 client.py
+oas.yml
 Dockerfile
+docker-compose.yml
