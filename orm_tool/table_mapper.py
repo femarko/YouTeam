@@ -1,8 +1,6 @@
-import sqlalchemy
 from sqlalchemy import Table, Column, Integer, String, DateTime, func
-from sqlalchemy.orm import relationship
 
-from orm import mapper
+from orm_tool import mapper
 from domain import models
 
 

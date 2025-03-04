@@ -1,4 +1,4 @@
-from orm import table_mapper
+from orm_tool import table_mapper
 from auth.entrypoints.flask_entrypoint import flask_app, views
 
 

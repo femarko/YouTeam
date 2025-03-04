@@ -12,10 +12,7 @@ def test_create_user(
         uow=fuow
     )
     data_from_repo = fuow.users.instances.pop()
-    assert type(result) is int
-    assert 0 <= result <= 9
-    assert result == data_from_repo.id
-    assert data_from_repo.name == user_data["name"]
-    assert data_from_repo.email == user_data["email"]
-    assert data_from_repo.password == user_data["password"]
-    assert data_from_repo.creation_date == user_data["creation_date"]
+    assert data_from_repo.id == result["id"]
+    assert data_from_repo.name == result["name"]
+    assert data_from_repo.email == result["email"]
+    assert data_from_repo.creation_date.isoformat() == result["creation_date"]

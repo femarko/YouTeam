@@ -11,10 +11,13 @@ class RepoProto(Protocol):
     def add(self, instance) -> None:
         pass
 
-    def get(self, instance_id: int) -> Any:
-        pass
+    # def get(self, instance_id: int) -> Any:
+    #     pass
 
     def delete(self, instance) -> None:
+        pass
+
+    def get_by_id(self, instance_id):
         pass
 
 
@@ -30,7 +33,7 @@ class Repository:
             self.session.add(instance)
 
     def get_by_id(self, instance_id: int) -> Any:
-        return self.session.get_by_id(self.model_cl, instance_id)
+        return self.session.get(self.model_cl, instance_id)
 
     def delete(self, instance) -> None:
         self.session.delete(instance)

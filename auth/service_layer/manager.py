@@ -14,8 +14,8 @@ def create_user(
         uow.users.add(user)
         uow.commit()
         user_id: int = user.id
-        created_user_data = services.get_params(model=user)
-        return {"id": user_id, **created_user_data}
+    created_user_data = services.get_params(model=user)
+    return {"id": user_id, **created_user_data}
 
 
 def jwt_auth(

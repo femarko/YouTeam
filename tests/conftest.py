@@ -2,7 +2,11 @@ import pytest
 import datetime
 from typing import Optional
 
-from orm import table_mapper
+import sqlalchemy
+
+import auth.entrypoints.flask_entrypoint
+import orm_tool
+from orm_tool import table_mapper
 
 
 @pytest.fixture
@@ -46,6 +50,18 @@ def fake_unit_of_work():
 @pytest.fixture(autouse=True, scope="session")
 def start_mapping():
     table_mapper.start_mapping()
+
+
+@pytest.fixture
+def test_client():
+    return auth.entrypoints.flask_entrypoint.flask_app.test_client()
+
+
+
+
+@pytest.fixture
+def test_user_data():
+    return {"name": "test_name", "full_name": "test_full_name", "email": "test@email.test", "password": "test_pass"}
 
 
 class FakeBaseRepo:
@@ -120,3 +136,22 @@ class FakeUnitOfWork:
             self.users.execute_deletion()
         if self.advs and self.advs.temp_deleted:
             self.advs.execute_deletion()
+
+
+@pytest.fixture(scope="session")
+def engine():
+    return sqlalchemy.create_engine(orm_tool.POSTGRES_DSN)
+
+
+@pytest.fixture
+def session_maker(engine):
+    return sqlalchemy.orm.sessionmaker(bind=engine)
+
+
+@pytest.fixture(scope="function")
+def clear_db(engine):
+    table_mapper.mapper.metadata.drop_all(bind=engine)
+    table_mapper.mapper.metadata.create_all(bind=engine)
+    yield
+    table_mapper.mapper.metadata.drop_all(bind=engine)
+    table_mapper.mapper.metadata.create_all(bind=engine)

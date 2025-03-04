@@ -1,7 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 
 from domain import custom_errors
-from orm import session_maker
+from orm_tool import session_maker
 from repository.repository import RepoProto, UserRepository
 
 
