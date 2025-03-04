@@ -1,5 +1,5 @@
 ### Структура
-* ```auth```: сервис регистрации и аутентификации пользователей\
+* ```auth```: сервис регистрации и аутентификации пользователей
     - ```entrypoints```: точки входа
       - ```flask_entrypoint```: точка входа для flask
         - ```__init__.py```: инициализация приложения flask
@@ -26,5 +26,6 @@
 ### Запуск
 * создать файл `.env` в корне проекта (образец: `.env.example`)
 * запуск PostgreSQL, PGAdmin в docker-контейнерах:\
-$ `docker-compose up -d` 
+$ `docker-compose up -d`
+* запуска приложения flask - в файле `entrypoints/flask_entrypoint/run_flask_app.py`
     
