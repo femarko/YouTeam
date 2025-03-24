@@ -28,7 +28,7 @@
 * создать файл `.env` в корне проекта (образец: `.env.example`)
 * запуск PostgreSQL, PGAdmin в docker-контейнерах:\
 $ `docker-compose up -d`
-* запуск приложения flask из корневой директории:
+* запуск приложения flask из корневой директории проекта:
 ```bash
 python3 -m auth.entrypoints.flask_entrypoint.run_flask_app
 ```
