@@ -21,12 +21,15 @@
     - ```__init__.py```: инициализация БД, вызов мэппера моделей с таблицами БД
     - ```drop_create.py```: удаление и создание таблиц БД
     - ```table_mapper.py```: мэппер моделей с таблицами БД
-* ```repository```: абстракция постоянного хранилища и методов досупа к нему
+* ```repository```: абстракция постоянного хранилища и методов доступа к нему
 * ```tests```: тесты
 * ```oas.yml```: OpenAPI-спецификация
 ### Запуск
 * создать файл `.env` в корне проекта (образец: `.env.example`)
 * запуск PostgreSQL, PGAdmin в docker-контейнерах:\
 $ `docker-compose up -d`
-* запуска приложения flask - в файле `entrypoints/flask_entrypoint/run_flask_app.py`
+* запуск приложения flask из корневой директории:
+```bash
+python3 -m auth.entrypoints.flask_entrypoint.run_flask_app
+```
     
